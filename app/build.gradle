@@ -23,13 +23,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
-
     compile 'com.android.support:support-vector-drawable:25.3.1'
     testCompile 'junit:junit:4.12'
     //添加注解依赖
@@ -37,4 +36,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     //支持多个dex包
     compile 'com.android.support:multidex:1.0.1'
+    //添加日志打印依赖
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.google.zxing:core:3.3.0'
 }

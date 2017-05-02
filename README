@@ -1,3 +1,4 @@
 1,MainActivity中用到自定义的BottomNavigationViewEx：
     https://github.com/ittianyu/BottomNavigationViewEx
-2，
+2，使用Looger日志框架，并进行封装：
+    https://github.com/Winfred1989/logger
