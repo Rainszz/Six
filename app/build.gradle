@@ -20,6 +20,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dexOptions {
+        incremental false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
@@ -38,5 +45,12 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     //添加日志打印依赖
     compile 'com.orhanobut:logger:1.15'
+    //添加二维码依赖
     compile 'com.google.zxing:core:3.3.0'
+    //添加json数据解析的依赖
+    compile 'com.alibaba:fastjson:1.2.31'
+    //添加网络请求框架的依赖
+    compile 'com.zhy:okhttputils:2.6.2'
+    //添加xml数据解析的依赖
+    //compile 'com.thoughtworks.xstream:xstream:1.4.9'
 }
