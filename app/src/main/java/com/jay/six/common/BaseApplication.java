@@ -17,11 +17,17 @@ import com.orhanobut.logger.Logger;
 
 public class BaseApplication extends Application {
     private static final String TAG = "Six";
+    private static BaseApplication instance = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        this.instance = (BaseApplication) getApplicationContext();
         initLooger();
+    }
+
+    public static synchronized BaseApplication getInstance(){
+        return instance;
     }
 
     /**

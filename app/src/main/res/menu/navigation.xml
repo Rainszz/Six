@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:icon="@drawable/ic_nbv_news"
+        android:title="@string/bnv_news" />
 
     <item
         android:id="@+id/navigation_joke"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/ic_nbv_joke"
+        android:title="@string/bnv_joke" />
 
     <item
         android:id="@+id/navigation_pic"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/ic_nbv_pic"
+        android:title="@string/bnv_pic" />
 
     <item
         android:id="@+id/navigation_person"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/ic_nbv_person"
+        android:title="@string/bnv_person" />
 
 </menu>

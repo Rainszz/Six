@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Six</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="bnv_news">新闻</string>
+    <string name="bnv_joke">笑话</string>
+    <string name="bnv_pic">美图</string>
+    <string name="bnv_person">我</string>
+
+
 </resources>

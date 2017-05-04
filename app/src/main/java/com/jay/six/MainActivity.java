@@ -6,14 +6,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.jay.six.ui.activity.BaseActivity;
+import com.jay.six.common.BaseActivity;
 import com.jay.six.ui.fragment.JokeFragment;
 import com.jay.six.ui.fragment.NewsFragment;
 import com.jay.six.ui.fragment.PersonFragment;
@@ -30,8 +28,6 @@ import butterknife.ButterKnife;
  * */
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.message)
-    TextView message;
     @BindView(R.id.content)
     FrameLayout content;
     @BindView(R.id.navigation)
@@ -52,12 +48,22 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         initView();
+        setLeftVisibility(View.GONE);
+        setRightVisibility(View.GONE);
+
         initFragment();
     }
 
+    @Override
+    public void setEvent() {
+
+    }
+
     private void initFragment() {
+        //设置默认标题为新闻
+        setTitle(R.string.bnv_news);
+        //设置默认显示新闻的fragment
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         newsFragment = new NewsFragment();
@@ -84,24 +90,28 @@ public class MainActivity extends BaseActivity {
                     if(newsFragment == null){
                         newsFragment = new NewsFragment();
                     }
+                    setTitle(R.string.bnv_news);
                     replaceFragment(newsFragment);
                     return true;
                 case R.id.navigation_joke:
                     if(jokeFragment == null){
                         jokeFragment = new JokeFragment();
                     }
+                    setTitle(R.string.bnv_joke);
                     replaceFragment(jokeFragment);
                     return true;
                 case R.id.navigation_pic:
                     if(picFragment == null){
                         picFragment = new PicFragment();
                     }
-                    replaceFragment(personFragment);
+                    setTitle(R.string.bnv_pic);
+                    replaceFragment(picFragment);
                     return true;
                 case R.id.navigation_person:
                     if(personFragment == null){
                         personFragment = new PersonFragment();
                     }
+                    setTitle(R.string.bnv_person);
                     replaceFragment(personFragment);
                     return true;
             }
@@ -111,17 +121,9 @@ public class MainActivity extends BaseActivity {
     };
 
     private void replaceFragment(Fragment fragment){
+        transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content,fragment);
         transaction.commit();
     }
 
-    @Override
-    public void setLeftVisibility(int visibility) {
-        super.setLeftVisibility(View.GONE);
-    }
-
-    @Override
-    public void setRightVisibility(int visibility) {
-        super.setRightVisibility(View.GONE);
-    }
 }

@@ -2,3 +2,19 @@
     https://github.com/ittianyu/BottomNavigationViewEx
 2，使用Looger日志框架，并进行封装：
     https://github.com/Winfred1989/logger
+3,真机测试中发现android5.0之前版本的手机不支持SVG，会报错
+    原因5.0之前不支持svg图片，即时加入了兼容库部分控件也不能在xml布局文件直接使用，需要在java代码添加
+    背景为svg图片，例如：
+    BaseActivity-->initView():
+        btn_left.setBackgroundResource(R.drawable.ic_back);
+4,因为需要自定义的标题栏所以app的样式需要使用没有actionbar并且默认背景为白色的样式：
+    style.xml:
+        <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+5,图片资源使用svg图片，从iconfont阿里巴巴图标库获取
+6,adapter相关的封装:
+    http://www.cniao5.com/forum/thread/2ac69d820f0611e790dc00163e0230fa
+7,Android RecyclerView通用适配器，支持Header、Footer、LoadMore、EmptyView等功能:
+    http://www.jianshu.com/p/c86a39f4e811
+8,
+9,
+10,

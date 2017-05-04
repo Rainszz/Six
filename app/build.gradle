@@ -20,13 +20,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dexOptions {
-        incremental false
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
 }
 
 dependencies {
@@ -53,4 +46,9 @@ dependencies {
     compile 'com.zhy:okhttputils:2.6.2'
     //添加xml数据解析的依赖
     //compile 'com.thoughtworks.xstream:xstream:1.4.9'
+    //添加事件总线依赖
+    compile 'org.greenrobot:eventbus:3.0.0'
+    //Android RecyclerView通用适配器，支持Header、Footer、LoadMore、EmptyView等功能的依赖
+    compile 'com.lwkandroid:recyclerviewadapter:1.1.0'
+
 }
