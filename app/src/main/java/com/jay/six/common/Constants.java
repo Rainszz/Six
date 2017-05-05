@@ -20,4 +20,9 @@ public class Constants {
 
     public static final String WEIXIN_APP_ID = "wxb4754ef83e822c2b";
     public static final String DOMAIN = "https://www.qulover.com/";
+
+    public static final String TIANXING_API_KEY = "59d6438eb210845d637e0b24c34d9095";
+    public static final String TIANXING_API_WXURL = "https://api.tianapi.com/weixin/?key=59d6438eb210845d637e0b24c34d9095";
+
+    public static final String PAGE_NUM = "10";
 }

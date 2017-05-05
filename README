@@ -15,6 +15,26 @@
     http://www.cniao5.com/forum/thread/2ac69d820f0611e790dc00163e0230fa
 7,Android RecyclerView通用适配器，支持Header、Footer、LoadMore、EmptyView等功能:
     http://www.jianshu.com/p/c86a39f4e811
-8,
-9,
-10,
+8,网络请求的封装：我们用的是Okhttputils按道理是应该封装的，但是okhttputils已经满足大部分项目需求所以才没有封装的
+    http://www.jianshu.com/p/96f55f19c1e4
+9,ImageLoader的封装使用：http://www.jianshu.com/p/d8890404d87b
+    String url = http://i2.buimg.com/567571/d208d52913b997bb.jpg?imageView2/2/w/200;
+    ImageView photoView = new ImageView();
+    //判断缓存中是否已经缓存过该图片，有则直接拿Bitmap，没有则直接调用Glide加载并缓存Bitmap
+    Bitmap bitmap = LruCacheUtils.getInstance().getBitmapFromMemCache(url);
+    if (bitmap != null) {
+         photoView.setImageBitmap(bitmap);
+    } else {
+        PhotoLoader.displayImageTarget(photoView, url, getTarget(photoView,url, position));
+    }
+10,Fragment嵌套Fragment时子Fragment的管理对象应该是getChildFragmentManager();
+    activity中：
+        fragmentManager = getSupportFragmentManager();
+    Fragment中:
+        tabNewsAdapter = new TabNewsAdapter(getChildFragmentManager(),list_fragment,list_title);
+11,天行数据有分页，但是图片地址有两个问题：
+    a，有转义字符：\
+    b,有后缀：_ss
+    需要进行处理：
+        String imgUrl = data.getPicUrl().replace("_ss","").replace("\\","");
+12，图片样式用:android:scaleType="centerCrop"

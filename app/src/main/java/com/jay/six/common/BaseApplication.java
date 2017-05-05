@@ -9,6 +9,14 @@ import com.jay.six.BuildConfig;
 import com.jay.six.utils.AndroidLogAdapter;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.cookie.CookieJarImpl;
+import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
+import com.zhy.http.okhttp.log.LoggerInterceptor;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 
 /**
@@ -24,6 +32,19 @@ public class BaseApplication extends Application {
         super.onCreate();
         this.instance = (BaseApplication) getApplicationContext();
         initLooger();
+        initOkhttpUtils();
+    }
+
+    private void initOkhttpUtils() {
+        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new LoggerInterceptor("HTTP"))
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .cookieJar(cookieJar)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     public static synchronized BaseApplication getInstance(){

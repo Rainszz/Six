@@ -16,8 +16,6 @@ public class JsonMananger {
     static{
         TypeUtils.compatibleWithJavaBean = true;
     }
-    private static final String tag = JsonMananger.class.getSimpleName();
-
     /**
      * 将json字符串转换成java对象
      * @param json

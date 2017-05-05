@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -298,17 +300,19 @@ public abstract class BaseFragment extends Fragment {
             setArguments(data);
     }
 
+    protected abstract void initListener();
 
     @Override
-    final public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LogUtils.d("onCreate...");
-        // 防止重复调用onCreate方法，造成在initData方法中adapter重复初始化问题
-        if (!viewCreated) {
-            viewCreated = true;
-            initData();
-        }
+    public void onResume() {
+        super.onResume();
+        initData();
+        initView();
+        initListener();
     }
+
+    protected abstract void initData();
+
+    protected abstract void initView();
 
     public void setInflateView(View view){
         inflateView = view;
@@ -324,18 +328,5 @@ public abstract class BaseFragment extends Fragment {
             if (parent != null)
                 ((ViewGroup) parent).removeView(inflateView);
         }
-    }
-
-
-    public void initData() {
-        LogUtils.d("initData...");
-    }
-
-    public void initListener() {
-        LogUtils.d("initListener...");
-    }
-
-    public void initDialog() {
-        LogUtils.d("initDialog...");
     }
 }

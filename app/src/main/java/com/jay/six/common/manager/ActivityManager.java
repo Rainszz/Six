@@ -49,7 +49,7 @@ public class ActivityManager {
         if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
-        LogUtils.e("app into activity: "+ activity.getLocalClassName());
+        LogUtils.d("app into activity: "+ activity.getLocalClassName());
         activityStack.add(activity);
     }
 

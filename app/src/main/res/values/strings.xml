@@ -5,5 +5,9 @@
     <string name="bnv_pic">美图</string>
     <string name="bnv_person">我</string>
 
+    <string name="flag_end">--end--</string>
+    <string name="load_failed">加载失败，点我再试试？</string>
+    <string name="loading">努力加载中...</string>
+
 
 </resources>

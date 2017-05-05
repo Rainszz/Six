@@ -50,5 +50,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     //Android RecyclerView通用适配器，支持Header、Footer、LoadMore、EmptyView等功能的依赖
     compile 'com.lwkandroid:recyclerviewadapter:1.1.0'
-
+    //添加图片缓存框架
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
