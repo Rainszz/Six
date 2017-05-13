@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.jay.six.BuildConfig;
+import com.jay.six.common.manager.PreferencesManager;
 import com.jay.six.utils.AndroidLogAdapter;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -16,6 +17,8 @@ import com.zhy.http.okhttp.log.LoggerInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.bmob.v3.Bmob;
+import cn.sharesdk.framework.ShareSDK;
 import okhttp3.OkHttpClient;
 
 
@@ -33,9 +36,29 @@ public class BaseApplication extends Application {
         this.instance = (BaseApplication) getApplicationContext();
         initLooger();
         initOkhttpUtils();
+        initShareSDK();
+        initBmobSDK();
+        initData();
+    }
+
+    private void initData() {
+        //TODO 初始化数据
+
+
+        //TODO 登录状态
+        //TODO 已经登录的话重新加载登录信息，（重新请求个人信息数据，并获取sessionid，保存在cookie中，）
+    }
+
+    private void initBmobSDK() {
+        Bmob.initialize(this, "464085faa39f50f12a26d82c81d12228");
+    }
+
+    private void initShareSDK() {
+        ShareSDK.initSDK(this);
     }
 
     private void initOkhttpUtils() {
+        //允许使用cookie
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new LoggerInterceptor("HTTP"))

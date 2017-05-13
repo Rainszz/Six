@@ -9,9 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
 import com.jay.six.R;
+import com.jay.six.bean.NewsChanel;
 import com.jay.six.common.BaseFragment;
+import com.jay.six.common.Constants;
+import com.jay.six.common.parse.JsonMananger;
 import com.jay.six.ui.adapter.TabNewsAdapter;
+import com.jay.six.utils.FileUtils;
+import com.jay.six.utils.HttpException;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2017/5/2 0002.
@@ -32,7 +41,7 @@ public class NewsFragment extends BaseFragment {
     Unbinder unbinder;
     private View rootView;
     private List<Fragment> list_fragment = new ArrayList<>();//定义要装fragment的列表
-    private List<String> list_title = new ArrayList<>();//定义要装tab名称的列表
+    private List<NewsChanel> list_title = new ArrayList<>();//定义要装tab名称的列表
     private TabNewsAdapter tabNewsAdapter;//定义Tab的Adapter
 
 
@@ -47,81 +56,30 @@ public class NewsFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        //将名称加载tab名字列表，正常情况下，我们应该在values/arrays.xml中进行定义然后调用
-        list_title.add("社会新闻");
-        list_title.add("国内新闻");
-        list_title.add("国际新闻");
-        list_title.add("娱乐新闻");
-        list_title.add("NBA新闻");
-        list_title.add("科技新闻");
-        list_title.add("创业新闻");
-        list_title.add("移动互联");
-        list_title.add("旅游资讯");
-        list_title.add("健康知识");
-        list_title.add("奇闻异事");
-    }
-
-    /**
-     * @param i
-     * @param tabNewsFragment
-     */
-    private void setType(int i, TabNewsFragment tabNewsFragment) {
-        switch (i) {
-            case 0:
-                tabNewsFragment.setArgument("type", "social");
-                break;
-            case 1:
-                tabNewsFragment.setArgument("type", "guonei");
-                break;
-            case 2:
-                tabNewsFragment.setArgument("type", "world");
-                break;
-            case 3:
-                tabNewsFragment.setArgument("type", "huabian");
-                break;
-            case 4:
-                tabNewsFragment.setArgument("type", "nba");
-                break;
-            case 5:
-                tabNewsFragment.setArgument("type", "keji");
-                break;
-            case 6:
-                tabNewsFragment.setArgument("type", "startup");
-                break;
-            case 7:
-                tabNewsFragment.setArgument("type", "mobile");
-                break;
-            case 8:
-                tabNewsFragment.setArgument("type", "travel");
-                break;
-            case 9:
-                tabNewsFragment.setArgument("type", "health");
-                break;
-            case 10:
-                tabNewsFragment.setArgument("type", "qiwen");
-                break;
+        list_title.clear();
+        String chenelJson = FileUtils.getJson(getActivity(),"newsChanel.json");
+        try {
+            list_title.addAll(JsonMananger.jsonToList(chenelJson,NewsChanel.class));
+        } catch (HttpException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void initView() {
+        tabTitle.removeAllTabs();
         for (int i = 0; i < list_title.size(); i++) {
             //初始化fragment
             TabNewsFragment tabNewsFragment = new TabNewsFragment();
             //为fragment传递参数：参数为新闻类型
-            setType(i, tabNewsFragment);
+            tabNewsFragment.setArgument("channelId",list_title.get(i).getChannelId());
             list_fragment.add(tabNewsFragment);
-            tabTitle.addTab(tabTitle.newTab().setText(list_title.get(i)));
+            tabTitle.addTab(tabTitle.newTab().setText(list_title.get(i).getName()));
         }
         tabNewsAdapter = new TabNewsAdapter(getChildFragmentManager(),list_fragment,list_title);
         vpNews.setAdapter(tabNewsAdapter);
         //为TabLayout添加adapter
         tabTitle.setupWithViewPager(vpNews);
-    }
-
-    @Override
-    protected void initListener() {
-
     }
 
     @Override

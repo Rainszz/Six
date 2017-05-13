@@ -1,6 +1,7 @@
 package com.jay.six.utils;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -28,12 +29,15 @@ public class FileUtils {
     private static final String tag = FileUtils.class.getSimpleName();
 
     private static FileUtils instance;
-    /** 缓存路径 **/
+    /**
+     * 缓存路径
+     **/
     private String rootPath;
 
     /**
      * 获取FileUtils实例，单例模式实现
      * 该方法缓存路径为SD卡
+     *
      * @return
      */
     public static FileUtils getInstance() {
@@ -43,6 +47,7 @@ public class FileUtils {
     /**
      * 获取FileUtils实例，单例模式实现
      * 该方法缓存路径为/data/data/cn.xxx.xxx(当前包)/files
+     *
      * @param context
      * @return
      */
@@ -53,6 +58,7 @@ public class FileUtils {
     /**
      * 获取FileUtils实例，单例模式实现
      * 该方法缓存路径为设置的rootPath
+     *
      * @param rootPath
      * @return
      */
@@ -73,7 +79,7 @@ public class FileUtils {
      */
     public FileUtils(String rootPath) {
         this.rootPath = rootPath;
-        if(TextUtils.isEmpty(rootPath)){
+        if (TextUtils.isEmpty(rootPath)) {
             throw new IllegalArgumentException("FileUtils rootPath is not null.");
         }
     }
@@ -81,14 +87,15 @@ public class FileUtils {
 
     /**
      * 获取保存到本地的资源路径
+     *
      * @param fileName 文件名
      * @return
      */
-    public String getFilePath(String fileName){
+    public String getFilePath(String fileName) {
         StringBuilder path = new StringBuilder(rootPath);
-        if(!TextUtils.isEmpty(fileName)){
+        if (!TextUtils.isEmpty(fileName)) {
             File file = new File(path.toString());
-            if(!file.exists()){
+            if (!file.exists()) {
                 file.mkdirs();
             }
             path.append(File.separator);
@@ -101,12 +108,13 @@ public class FileUtils {
 
     /**
      * 判断文件是否存在， true表示存在，false表示
+     *
      * @param fileName 文件名
      * @return
      */
-    public boolean isFileExits(String fileName){
+    public boolean isFileExits(String fileName) {
         File file = new File(getFilePath(fileName));
-        if(file.exists()){
+        if (file.exists()) {
             return true;
         }
         return false;
@@ -114,29 +122,30 @@ public class FileUtils {
 
     /**
      * 保存图片到本地
-     * @param bitmap Bitmap对象
+     *
+     * @param bitmap   Bitmap对象
      * @param fileName 文件名
      * @return
      */
     public boolean saveFile(Bitmap bitmap, String fileName) {
 
-        if(bitmap == null) return false;
+        if (bitmap == null) return false;
         OutputStream output = null;
 
-        try{
+        try {
             File file = new File(getFilePath(fileName));
-            if(file.exists()){
+            if (file.exists()) {
                 LogUtils.e(fileName + " file already exists.");
                 return true;
-            }else{
-                if(file.createNewFile()){
+            } else {
+                if (file.createNewFile()) {
                     output = new FileOutputStream(file);
 
                     Bitmap.CompressFormat format = Bitmap.CompressFormat.PNG;
                     String tempFileName = fileName.toLowerCase(Locale.getDefault());
-                    if(".jpg".endsWith(tempFileName)){
+                    if (".jpg".endsWith(tempFileName)) {
                         format = Bitmap.CompressFormat.JPEG;
-                    }else if(".png".endsWith(tempFileName)){
+                    } else if (".png".endsWith(tempFileName)) {
                         format = Bitmap.CompressFormat.PNG;
                     }
 
@@ -147,9 +156,9 @@ public class FileUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             try {
-                if (output != null)output.close();
+                if (output != null) output.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -159,12 +168,13 @@ public class FileUtils {
 
     /**
      * 保存字符串到本地
-     * @param content 字符串内容
+     *
+     * @param content  字符串内容
      * @param fileName 文件名
      * @return
      */
     public boolean saveFile(String content, String fileName) {
-        if(!TextUtils.isEmpty(content)){
+        if (!TextUtils.isEmpty(content)) {
             return saveFile(content.getBytes(), fileName);
         }
         return false;
@@ -172,14 +182,15 @@ public class FileUtils {
 
     /**
      * 保存字符串到本地
-     * @param bytes 字符串内容
+     *
+     * @param bytes    字符串内容
      * @param fileName 文件名
      * @return
      */
     public boolean saveFile(byte[] bytes, String fileName) {
         FileOutputStream output = null;
         try {
-            if(bytes != null){
+            if (bytes != null) {
                 File file = new File(rootPath, fileName);
                 output = new FileOutputStream(file);
                 output.write(bytes);
@@ -190,9 +201,9 @@ public class FileUtils {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             try {
-                if(output != null)output.close();
+                if (output != null) output.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -202,6 +213,7 @@ public class FileUtils {
 
     /**
      * 保存数据流到本地
+     *
      * @param instream 数据流
      * @param fileName 文件名
      * @return
@@ -226,8 +238,8 @@ public class FileUtils {
             e.printStackTrace();
         } finally {
             try {
-                if(instream != null)instream.close();
-                if(buffer != null){
+                if (instream != null) instream.close();
+                if (buffer != null) {
                     buffer.flush();
                     buffer.close();
                 }
@@ -240,16 +252,17 @@ public class FileUtils {
 
     /**
      * 读取文件
+     *
      * @param filePath
      * @return
      */
-    public String readFile(String filePath){
+    public String readFile(String filePath) {
         StringBuilder sb = new StringBuilder();
         try {
             FileInputStream fis = new FileInputStream(filePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = null;
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
             br.close();
@@ -264,14 +277,15 @@ public class FileUtils {
 
     /**
      * 从resource的raw中读取文件数据
+     *
      * @param context
      * @param resId
      * @return
      */
-    public InputStream getRawStream(Context context, int resId){
-        try{
+    public InputStream getRawStream(Context context, int resId) {
+        try {
             return context.getResources().openRawResource(resId);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -279,14 +293,15 @@ public class FileUtils {
 
     /**
      * 从resource的asset中读取文件数据
+     *
      * @param context
      * @param fileName
      * @return
      */
-    public InputStream getAssetsStream(Context context, String fileName){
-        try{
+    public InputStream getAssetsStream(Context context, String fileName) {
+        try {
             return context.getResources().getAssets().open(fileName);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -335,11 +350,12 @@ public class FileUtils {
 
     /**
      * 数据流转字符串
+     *
      * @param instream
      * @return
      * @throws IOException
      */
-    public String inputSteamToString(InputStream instream){
+    public String inputSteamToString(InputStream instream) {
         String result = null;
         try {
             byte bytes[] = InputStream2Bytes(instream);
@@ -348,5 +364,24 @@ public class FileUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String getJson(Context mContext, String fileName) {
+        StringBuilder sb = new StringBuilder();
+        AssetManager am = mContext.getAssets();
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    am.open(fileName)));
+            String next = "";
+            while (null != (next = br.readLine())) {
+                sb.append(next);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            LogUtils.e(e.getMessage());
+            sb.delete(0, sb.length());
+        }
+        return sb.toString().trim();
     }
 }

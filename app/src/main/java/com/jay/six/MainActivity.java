@@ -55,11 +55,6 @@ public class MainActivity extends BaseActivity {
         initFragment();
     }
 
-    @Override
-    public void setEvent() {
-
-    }
-
     private void initFragment() {
         //设置默认标题为新闻
         setTitle(R.string.bnv_news);

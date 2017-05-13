@@ -1,5 +1,7 @@
 package com.jay.six.utils;
 
+import android.util.Log;
+
 import com.orhanobut.logger.Logger;
 
 /**

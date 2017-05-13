@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import com.jay.six.utils.HttpException;
 import com.jay.six.utils.LogUtils;
 import com.jay.six.utils.ObjectUtil;
 import com.jay.six.utils.TextUtil;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * [Fragment基础类，实现异步框架，Activity堆栈的管理，destroy时候销毁所有资源]
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment<T> extends Fragment {
 
     /**
      * Fragment content view
@@ -72,6 +73,16 @@ public abstract class BaseFragment extends Fragment {
             throw new NullPointerException("传递的值的键名称为null或空");
         final Intent intent = new Intent(getContext(), targetActivity);
         intent.putExtra(extraName, extraValue);
+        startActivity(intent);
+    }
+
+    public final void startActivity(@NonNull String extraName, @NonNull T ojectParcelable, @NonNull Class<?> targetActivity){
+        if (TextUtil.isEmptyAndNull(extraName))
+            throw new NullPointerException("传递的值的键名称为null或空");
+        final Intent intent = new Intent(getContext(), targetActivity);
+        Bundle data = new Bundle();
+        data.putParcelable(extraName, (Parcelable) ojectParcelable);
+        intent.putExtras(data);
         startActivity(intent);
     }
 
@@ -300,14 +311,11 @@ public abstract class BaseFragment extends Fragment {
             setArguments(data);
     }
 
-    protected abstract void initListener();
-
     @Override
     public void onResume() {
         super.onResume();
         initData();
         initView();
-        initListener();
     }
 
     protected abstract void initData();

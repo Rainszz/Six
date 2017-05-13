@@ -51,12 +51,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.setContentView(R.layout.layout_base);
 
         initView();
-        setEvent();
         //5.0+的专场动画
         setupWindowAnimation();
     }
-
-    public abstract void setEvent();
 
     private void initView() {
         mContext = this;
@@ -165,6 +162,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param resId
      */
     public void setRightDrawable(int resId) {
+        btn_right.setText("");
         btn_right.setWidth(DensityUtils.dp2px(this, 36));
         btn_right.setHeight(DensityUtils.dp2px(this, 36));
         btn_right.setBackgroundResource(resId);

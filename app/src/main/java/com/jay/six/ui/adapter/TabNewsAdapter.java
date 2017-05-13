@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.jay.six.bean.NewsChanel;
+
 import java.util.List;
 
 /**
@@ -12,9 +14,9 @@ import java.util.List;
 
 public class TabNewsAdapter extends FragmentPagerAdapter {
     private List<Fragment> list_fragment; //fragment列表
-    private List<String> list_Title; //tab名的列表
+    private List<NewsChanel> list_Title; //tab名的列表
 
-    public TabNewsAdapter(FragmentManager fm,List<Fragment> list_fragment,List<String> list_Title) {
+    public TabNewsAdapter(FragmentManager fm,List<Fragment> list_fragment,List<NewsChanel> list_Title) {
         super(fm);
         this.list_fragment = list_fragment;
         this.list_Title = list_Title;
@@ -33,6 +35,6 @@ public class TabNewsAdapter extends FragmentPagerAdapter {
     //此方法用来显示tab上的名字
     @Override
     public CharSequence getPageTitle(int position) {
-        return list_Title.get(position % list_Title.size());
+        return list_Title.get(position % list_Title.size()).getName();
     }
 }

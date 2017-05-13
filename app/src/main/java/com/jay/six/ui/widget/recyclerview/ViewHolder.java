@@ -102,6 +102,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         view.setImageBitmap(bitmap);
     }
 
+    public void setVisbilty(int viewId, int visiable){
+        View view = getView(viewId);
+        view.setVisibility(visiable);
+    }
+
     /**
      * 设置ImageView的值
      * 第三方  ImageLoder Glide Picasso

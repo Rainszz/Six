@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Six.iml" filepath="$PROJECT_DIR$/Six.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sharesdklib/sharesdklib.iml" filepath="$PROJECT_DIR$/sharesdklib/sharesdklib.iml" />
     </modules>
   </component>
 </project>

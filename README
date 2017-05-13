@@ -37,4 +37,11 @@
     b,有后缀：_ss
     需要进行处理：
         String imgUrl = data.getPicUrl().replace("_ss","").replace("\\","");
-12，图片样式用:android:scaleType="centerCrop"
+12，图片样式用:android:scaleType="centerCrop|center"
+13,多级联动选择器：
+    https://github.com/Bigkoo/Android-PickerView
+14,图片拍照选择上传：
+    https://github.com/donglua/PhotoPicker
+    https://github.com/crazycodeboy/TakePhoto
+    https://github.com/Yalantis/uCrop
+    https://github.com/TangXiaoLv/TelegramGallery/blob/master/README_CN.md

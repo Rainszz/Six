@@ -45,7 +45,7 @@ public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder,final int position) {
         int viewType = holder.getItemViewType();
         if (isCommonItemView(viewType)) {
             bindCommonItem(holder, position);
