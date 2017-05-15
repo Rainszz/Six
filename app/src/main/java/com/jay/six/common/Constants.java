@@ -14,6 +14,11 @@ public class Constants {
     public static final String USER_PHOTO = "user_photo";
     /** 用户头昵称 **/
     public static final String USER_NAME = "user_name";
+    /** 用户头密码 **/
+    public static final String USER_PWD = "user_pwd";
+    /** 用户登录方式 **/
+    public static final String LOGINTYPE = "login_type";
+
 
 
     /** 数据库名称 **/
@@ -35,4 +40,8 @@ public class Constants {
     public static final String SHOW_API_ID = "37512";
     public static final String SHOW_API_SECRET = "4ba8492d8c6945adb0832237a7a0c586";
     public static final String JUHE_JOKE_KEY = "b558153b9823f2d1e6af21a0ce052861";
+
+    public static final int LOGIN_TYPE_NORMAL = 0X001;
+    public static final int LOGIN_TYPE_THIRD = 0X002;
+
 }
