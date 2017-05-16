@@ -1,8 +1,10 @@
 package com.jay.six.ui.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jay.six.R;
+import com.jay.six.bean.Account;
+import com.jay.six.bean.Collection;
 import com.jay.six.bean.ResultJoke;
 import com.jay.six.bean.ResultJoke.ResultBean.Joke;
+import com.jay.six.common.BaseApplication;
 import com.jay.six.common.BaseFragment;
 import com.jay.six.common.Constants;
 import com.jay.six.common.ServerConfig;
@@ -20,9 +25,11 @@ import com.jay.six.ui.adapter.JokeAdapter;
 import com.jay.six.ui.widget.recyclerview.DividerItemDecoration;
 import com.jay.six.ui.widget.recyclerview.ViewHolder;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnItemClickListener;
+import com.jay.six.ui.widget.recyclerview.interfaces.OnItemLongClickListener;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnLoadMoreListener;
 import com.jay.six.utils.HttpException;
 import com.jay.six.utils.LogUtils;
+import com.jay.six.utils.LoginUtils;
 import com.jay.six.utils.ShareUtils;
 import com.jay.six.utils.TimeUtils;
 import com.jay.six.utils.ToastUtils;
@@ -35,6 +42,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.SaveListener;
 import okhttp3.Call;
 
 /**
@@ -101,6 +110,33 @@ public class JokeFragment extends BaseFragment {
 
         });
 
+        jokeAdapter.setOnItemLongClickListener(new OnItemLongClickListener<Joke>() {
+            @Override
+            public void onItemLongClick(ViewHolder viewHolder, final Joke data, int position) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.collection)
+                        .setMessage("是否收藏？")
+                        .setPositiveButton("收藏", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LoginUtils.checkLogin(true);
+                                Account account = BmobUser.getCurrentUser(BaseApplication.getInstance(),Account.class);
+                                if(account != null){
+                                    Collection collection = new Collection();
+                                    collection.setuId(account.getObjectId());
+                                    collection.setType(Constants.COLLECTION_TYPE_JOKE);
+                                    collection.setTitle(data.getContent());
+                                    saveCollectionData(collection);
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消",null)
+                        .create()
+                        .show();
+
+            }
+        });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(layoutManager);
@@ -112,6 +148,20 @@ public class JokeFragment extends BaseFragment {
             public void onRefresh() {
                 page = 1;
                 request(TYPE_REFRESH, page);
+            }
+        });
+    }
+
+    private void saveCollectionData(Collection collection) {
+        collection.save(getActivity(), new SaveListener() {
+            @Override
+            public void onSuccess() {
+                ToastUtils.shortToast(getActivity(),"收藏成功!");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                ToastUtils.shortToast(getActivity(),"收藏失败!");
             }
         });
     }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.jay.six.ui.widget.recyclerview.ViewHolder;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnItemChildClickListener;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnItemClickListener;
+import com.jay.six.ui.widget.recyclerview.interfaces.OnItemLongClickListener;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnSwipeMenuClickListener;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.List;
 public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
 
     protected OnItemClickListener<T> mItemClickListener;
+    protected OnItemLongClickListener<T> mItemLongClickListener;
 
 
     protected ArrayList<Integer> mViewId = new ArrayList<>();
@@ -65,6 +67,16 @@ public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
             }
         });
 
+        viewHolder.getConvertView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mItemLongClickListener != null){
+                    mItemLongClickListener.onItemLongClick(viewHolder,mDatas.get(position), position);
+                }
+                return true;
+            }
+        });
+
         for (int i = 0; i < mItemChildIds.size(); i++) {
             final int tempI = i;
             if (viewHolder.getConvertView().findViewById(mItemChildIds.get(i)) != null) {
@@ -99,6 +111,10 @@ public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
 
     public void setOnItemClickListener(OnItemClickListener<T> itemClickListener) {
         mItemClickListener = itemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener<T> itemLongClickListener){
+        mItemLongClickListener = itemLongClickListener;
     }
 
     public void setOnSwipMenuClickListener(int viewId, OnSwipeMenuClickListener<T> swipeMenuClickListener) {

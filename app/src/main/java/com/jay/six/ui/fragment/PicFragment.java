@@ -1,9 +1,11 @@
 package com.jay.six.ui.fragment;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +16,11 @@ import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
 import com.jay.six.R;
+import com.jay.six.bean.Account;
+import com.jay.six.bean.Collection;
 import com.jay.six.bean.Picture;
 import com.jay.six.bean.ResultNews;
+import com.jay.six.common.BaseApplication;
 import com.jay.six.common.BaseFragment;
 import com.jay.six.common.Constants;
 import com.jay.six.common.ServerConfig;
@@ -27,9 +32,11 @@ import com.jay.six.ui.widget.recyclerview.DividerGridItemDecoration;
 import com.jay.six.ui.widget.recyclerview.DividerItemDecoration;
 import com.jay.six.ui.widget.recyclerview.ViewHolder;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnItemClickListener;
+import com.jay.six.ui.widget.recyclerview.interfaces.OnItemLongClickListener;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnLoadMoreListener;
 import com.jay.six.utils.HttpException;
 import com.jay.six.utils.LogUtils;
+import com.jay.six.utils.LoginUtils;
 import com.jay.six.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -40,6 +47,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.SaveListener;
 import okhttp3.Call;
 
 /**
@@ -108,6 +117,33 @@ public class PicFragment extends BaseFragment {
 
         });
 
+        adapter.setOnItemLongClickListener(new OnItemLongClickListener<Picture>() {
+            @Override
+            public void onItemLongClick(ViewHolder viewHolder, final Picture data, int position) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.collection)
+                        .setMessage("是否收藏？")
+                        .setPositiveButton("收藏", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LoginUtils.checkLogin(true);
+                                Account account = BmobUser.getCurrentUser(BaseApplication.getInstance(),Account.class);
+                                if(account != null){
+                                    Collection collection = new Collection();
+                                    collection.setuId(account.getObjectId());
+                                    collection.setType(Constants.COLLECTION_TYPE_PIC);
+                                    collection.setTitle(data.getTitle());
+                                    collection.setPicUrl(data.getImageUrl());
+                                    saveCollectionData(collection);
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消",null)
+                        .create()
+                        .show();
+            }
+        });
+
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(staggeredGridLayoutManager);
 
@@ -163,6 +199,20 @@ public class PicFragment extends BaseFragment {
                         }
                     }
                 });
+    }
+
+    private void saveCollectionData(Collection collection) {
+        collection.save(getActivity(), new SaveListener() {
+            @Override
+            public void onSuccess() {
+                ToastUtils.shortToast(getActivity(),"收藏成功!");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                ToastUtils.shortToast(getActivity(),"收藏失败!");
+            }
+        });
     }
 
     @Override

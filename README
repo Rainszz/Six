@@ -46,4 +46,17 @@
     https://github.com/Yalantis/uCrop
     https://github.com/TangXiaoLv/TelegramGallery/blob/master/README_CN.md
     https://github.com/YancyYe/ImageSelector（使用的）
-15，
+15，夜间模式：
+    MODE_NIGHT_NO 日间模式
+    MODE_NIGHT_YES 夜间模式
+    MODE_NIGHT_AUTO 根据时间自动切换日夜间模式
+    MODE_NIGHT_FOLLOW_SYSTEM 默认模式，就是跟随系统的设置，
+        据说有可能以后会在android系统设置中添加日夜间模式的设置，
+        此时如果你的app是默认模式，会根据系统设置变化日夜间模式
+    继承AppCompatActivity，app的sdk最低版本在14以上，
+    你在任何地方都可以调用AppCompatDelegate.setDefaultNightMode(xxx)，因为这是个静态方法，
+    设置完之后新开启的页面，都会采用新的模式。你需要在每次切换模式之后，把当前模式保存在本地，
+    然后在下次打开app的时候，获取当前模式并调用这个方法设置一下，就可以使app保持之前的模式。
+16，版本更新：
+    http://www.jianshu.com/p/2ab0459a9c3c
+

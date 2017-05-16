@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".common.BaseApplication"
@@ -68,13 +68,22 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.jay.six.ui.activity.LoginActivity" />
+                <category android:name = "android.intent.category.DEFAULT"  />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.MoreInfoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
+
+        <activity android:name=".ui.activity.CollectionActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

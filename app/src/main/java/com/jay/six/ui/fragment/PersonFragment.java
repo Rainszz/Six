@@ -3,6 +3,7 @@ package com.jay.six.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import com.jay.six.R;
 import com.jay.six.common.BaseFragment;
 import com.jay.six.common.Constants;
 import com.jay.six.common.manager.PreferencesManager;
+import com.jay.six.ui.activity.CollectionActivity;
 import com.jay.six.ui.activity.LoginActivity;
 import com.jay.six.ui.activity.MoreInfoActivity;
 import com.jay.six.ui.activity.SettingsActivity;
+import com.jay.six.utils.LoginUtils;
 import com.jay.six.utils.picture.ImageLoader;
 
 import butterknife.BindView;
@@ -104,11 +107,12 @@ public class PersonFragment extends BaseFragment {
                 break;
             case R.id.img_like:
                 //TODO 收藏
-
+                LoginUtils.checkLogin(true);
+                startActivity(CollectionActivity.class);
                 break;
             case R.id.img_ninght:
                 //TODO 夜间模式
-
+                chengeTheme();
                 break;
             case R.id.layout_feedback:
                 //TODO 用户反馈
@@ -120,6 +124,17 @@ public class PersonFragment extends BaseFragment {
             case R.id.layout_about:
                 showAppInfo();
                 break;
+        }
+    }
+
+    private void chengeTheme() {
+        //默认是false
+        if(!PreferencesManager.getInstance(getActivity()).get(Constants.APP_THEME,false)){
+            PreferencesManager.getInstance(getActivity()).put(Constants.APP_THEME,true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else{
+            PreferencesManager.getInstance(getActivity()).put(Constants.APP_THEME,false);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 

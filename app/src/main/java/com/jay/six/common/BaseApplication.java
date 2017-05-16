@@ -3,6 +3,7 @@ package com.jay.six.common;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.jay.six.BuildConfig;
@@ -12,6 +13,7 @@ import com.jay.six.common.manager.PreferencesManager;
 import com.jay.six.ui.activity.LoginActivity;
 import com.jay.six.utils.AndroidLogAdapter;
 import com.jay.six.utils.LogUtils;
+import com.jay.six.utils.LoginUtils;
 import com.jay.six.utils.ToastUtils;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -49,64 +51,23 @@ public class BaseApplication extends Application {
         initShareSDK();
         initBmobSDK();
         initData();
+        chengeTheme();
     }
 
     private void initData() {
         //TODO 初始化数据
-        //TODO 登录状态
-        //TODO 已经登录的话自动完成登录，（重新请求个人信息数据，并获取sessionid，保存在cookie中，）
-        if(PreferencesManager.getInstance(getApplicationContext()).get(Constants.IS_LOGIN,false)){
-            String userPhoto = PreferencesManager.getInstance(getApplicationContext()).get(Constants.USER_PHOTO);
-            String userName = PreferencesManager.getInstance(getApplicationContext()).get(Constants.USER_NAME);
-            String userPwd = PreferencesManager.getInstance(getApplicationContext()).get(Constants.USER_PWD);
-            BmobUser.BmobThirdUserAuth authInfo = (BmobUser.BmobThirdUserAuth) PreferencesManager.getInstance(getApplicationContext()).get(BmobUser.BmobThirdUserAuth.class);
-            int loginType = PreferencesManager.getInstance(getApplicationContext()).get(Constants.LOGINTYPE,0);
-            switch (loginType){
-                case Constants.LOGIN_TYPE_NORMAL:
-                    loginByUser(userName,userPwd);
-                    break;
-                case Constants.LOGIN_TYPE_THIRD:
-                    loginByThird(authInfo);
-                    break;
-                default:
-                    ToastUtils.shortToast(getApplicationContext(),getString(R.string.auto_login_failed));
-                    break;
-            }
+        LoginUtils.checkLogin(false);
+    }
+
+    private void chengeTheme() {
+        //默认是false
+        if(!PreferencesManager.getInstance(this).get(Constants.APP_THEME,false)){
+            PreferencesManager.getInstance(this).put(Constants.APP_THEME,true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else{
+            PreferencesManager.getInstance(this).put(Constants.APP_THEME,false);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-    }
-
-    private void loginByThird(BmobUser.BmobThirdUserAuth authInfo) {
-        BmobUser.loginWithAuthData(getApplicationContext(), authInfo, new OtherLoginListener() {
-
-            @Override
-            public void onSuccess(JSONObject userAuth) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onFailure(int code, String msg) {
-                // TODO Auto-generated method stub
-                ToastUtils.shortToast(getApplicationContext(), getString(R.string.auto_login_third_failed) + msg);
-            }
-        });
-    }
-
-    private void loginByUser(String userName, final String userPwd) {
-        //使用BmobSDK提供的登录功能
-        Account user = new Account();
-        user.setUsername(userName);
-        user.setPassword(userPwd);
-        user.login(getApplicationContext(), new SaveListener() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                ToastUtils.shortToast(getApplicationContext(), s);
-            }
-        });
     }
 
     private void initBmobSDK() {

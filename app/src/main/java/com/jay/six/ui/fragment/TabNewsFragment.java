@@ -1,8 +1,10 @@
 package com.jay.six.ui.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jay.six.R;
+import com.jay.six.bean.Account;
+import com.jay.six.bean.Collection;
 import com.jay.six.bean.ResultNews;
 import com.jay.six.bean.ResultNews.ResBodyBean.PageBean.News;
+import com.jay.six.common.BaseApplication;
 import com.jay.six.common.BaseFragment;
 import com.jay.six.common.Constants;
 import com.jay.six.common.ServerConfig;
@@ -20,9 +25,11 @@ import com.jay.six.ui.activity.NewsDetailActivity;
 import com.jay.six.ui.adapter.NewsRefreshAdapter;
 import com.jay.six.ui.widget.recyclerview.ViewHolder;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnItemClickListener;
+import com.jay.six.ui.widget.recyclerview.interfaces.OnItemLongClickListener;
 import com.jay.six.ui.widget.recyclerview.interfaces.OnLoadMoreListener;
 import com.jay.six.utils.HttpException;
 import com.jay.six.utils.LogUtils;
+import com.jay.six.utils.LoginUtils;
 import com.jay.six.utils.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,6 +40,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.SaveListener;
 import okhttp3.Call;
 
 /**
@@ -116,7 +125,38 @@ public class TabNewsFragment extends BaseFragment {
 
             @Override
             public void onItemClick(ViewHolder viewHolder, News data, int position) {
-                startActivity("newsDetail",newsRefreshAdapter.getItem(position),NewsDetailActivity.class);
+                startActivity("newsDetail",data,NewsDetailActivity.class);
+//                startActivity("newsDetail",newsRefreshAdapter.getItem(position),NewsDetailActivity.class);
+            }
+        });
+        //长按收藏
+        newsRefreshAdapter.setOnItemLongClickListener(new OnItemLongClickListener<News>() {
+            @Override
+            public void onItemLongClick(ViewHolder viewHolder, final News data, int position) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.collection)
+                        .setMessage("是否收藏？")
+                        .setPositiveButton("收藏", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LoginUtils.checkLogin(true);
+                                Account account = BmobUser.getCurrentUser(BaseApplication.getInstance(),Account.class);
+                                if(account != null){
+                                    Collection collection = new Collection();
+                                    collection.setuId(account.getObjectId());
+                                    collection.setType(Constants.COLLECTION_TYPE_NEWS);
+                                    collection.setTitle(data.getTitle());
+                                    if(data.getImageurls().size() > 0){
+                                        collection.setPicUrl(data.getImageurls().get(0).getUrl());
+                                    }
+                                    collection.setUrl(data.getLink());
+                                    saveCollectionData(collection);
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消",null)
+                        .create()
+                        .show();
             }
         });
 
@@ -129,6 +169,20 @@ public class TabNewsFragment extends BaseFragment {
         });
 
         recyclerview.setAdapter(newsRefreshAdapter);
+    }
+
+    private void saveCollectionData(Collection collection) {
+        collection.save(getActivity(), new SaveListener() {
+            @Override
+            public void onSuccess() {
+                ToastUtils.shortToast(getActivity(),"收藏成功!");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                ToastUtils.shortToast(getActivity(),"收藏失败!");
+            }
+        });
     }
 
     private void request(final int type, int page){
