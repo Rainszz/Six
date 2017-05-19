@@ -95,4 +95,22 @@
 	http://tech.meituan.com/android_mvvm.html
 24，5分钟搞定android混淆：
 	http://www.jianshu.com/p/f3455ecaa56e
+25，完整教程：
+    http://hukai.me/android-training-course-in-chinese/ux/notify-user/build-notification.html
+
+APP开发：
+需求-》项目经理
+设计-》UI设计师
+整理框架-》项目经理（技术总监或开发人员）
+编码（实现功能）-》开发人员
+测试-》测试人员（开发人员）
+混淆-》开发人员
+打包-》开发人员
+加固-》开发人员
+多渠道打包-》开发人员
+签名-》开发人员
+发布-》开发人员
+更新（热修复）-》开发人员
+
+
 
